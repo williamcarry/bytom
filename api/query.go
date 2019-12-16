@@ -135,6 +135,7 @@ func (a *API) listTransactions(ctx context.Context, filter struct {
 	Detail       bool   `json:"detail"`
 	Unconfirmed  bool   `json:"unconfirmed"`
 	Count        uint   `json:"count"`
+	IsReverse    bool   `json:"is_reverse"`
 }) Response {
 	accountID := filter.AccountID
 	if filter.AccountAlias != "" {
@@ -145,7 +146,7 @@ func (a *API) listTransactions(ctx context.Context, filter struct {
 		accountID = acc.ID
 	}
 
-	transactions, err := a.wallet.GetTransactions(accountID, filter.StartTxID, filter.Count, filter.Unconfirmed)
+	transactions, err := a.wallet.GetTransactions(accountID, filter.StartTxID, filter.Count, filter.Unconfirmed, filter.IsReverse)
 	if err != nil {
 		return NewErrorResponse(err)
 	}

@@ -239,7 +239,7 @@ func findTransactionsByAccount(annotatedTx *query.AnnotatedTx, accountID string)
 }
 
 // GetTransactions get all walletDB transactions or unconfirmed transactions, and filter transactions by accountID and StartTxID optional
-func (w *Wallet) GetTransactions(accountID string, StartTxID string, count uint, unconfirmed bool) ([]*query.AnnotatedTx, error) {
+func (w *Wallet) GetTransactions(accountID string, StartTxID string, count uint, unconfirmed bool, isReverse bool) ([]*query.AnnotatedTx, error) {
 	annotatedTxs := []*query.AnnotatedTx{}
 	var startKey []byte
 	preFix := TxPrefix
@@ -260,7 +260,7 @@ func (w *Wallet) GetTransactions(accountID string, StartTxID string, count uint,
 		preFix = UnconfirmedTxPrefix
 	}
 
-	itr := w.DB.IteratorPrefixWithStart([]byte(preFix), startKey, true)
+	itr := w.DB.IteratorPrefixWithStart([]byte(preFix), startKey, isReverse)
 	defer itr.Release()
 
 	for txNum := count; itr.Next() && txNum > 0; {

@@ -125,6 +125,24 @@ func (h *HSM) createKeyFromMnemonic(alias string, auth string, mnemonic string) 
 	return &XPub{XPub: xpub, Alias: alias, File: file}, nil
 }
 
+func (h *HSM) CreateKey(xprv chainkd.XPrv, alias string, auth string) (*XPub, error) {
+	xpub := xprv.XPub()
+	id := uuid.NewRandom()
+	key := &XKey{
+		ID:      id,
+		KeyType: "bytom_kd",
+		XPub:    xpub,
+		XPrv:    xprv,
+		Alias:   alias,
+	}
+
+	file := h.keyStore.JoinPath(keyFileName(key.ID.String()))
+	if err := h.keyStore.StoreKey(file, key, auth); err != nil {
+		return nil, errors.Wrap(err, "storing keys")
+	}
+	return &XPub{XPub: xpub, Alias: alias, File: file}, nil
+}
+
 func (h *HSM) createChainKDKey(alias string, auth string, language string) (*XPub, *string, error) {
 	// Generate a mnemonic for memorization or user-friendly seeds
 	entropy, err := mnem.NewEntropy(EntropyLength)
