@@ -124,6 +124,10 @@ target/$(MINER_BINARY32):
 target/$(MINER_BINARY64):
 	CGO_ENABLED=0 GOARCH=amd64 go build $(BUILD_FLAGS) -o $@ cmd/miner/main.go
 
+golint:
+	@echo "======> Running golint"
+	@golint --set_exit_status $(PACKAGES)
+
 test:
 	@echo "====> Running go test"
 	@go test -tags "network" $(PACKAGES)
@@ -134,6 +138,6 @@ benchmark:
 functional-tests:
 	@go test -timeout=5m -tags="functional" ./test 
 
-ci: test functional-tests
+ci: test functional-tests golint
 
 .PHONY: all target release-all clean test benchmark
