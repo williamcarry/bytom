@@ -6,13 +6,9 @@ Bytom
 ## 1. 源码编译部署
 
 1）下载源码：
-
 $ git clone https://github.com/Bytom/bytom.git $GOPATH/src/github.com/bytom
-
 2）切换至1.0.5版本：
-
 $ cd $GOPATH/src/github.com/bytom
-
 $ git fetch origin v1.0.5
 $ git checkout v1.0.5
 3）编译源码：
