@@ -3,7 +3,7 @@ Bytom
 
 比原链的安装方式有多种。本书从源码分析的角度带领读者了解架构，所以使用源码编译的方式来介绍安装过程。
 
-**1. 源码编译部署
+## 1. 源码编译部署
 
 1）下载源码：
 $ git clone https://github.com/Bytom/bytom.git $GOPATH/src/github.com/bytom
@@ -42,7 +42,7 @@ $ ./bytomcli net-info
 当我们执行ps -ef命令看到bytomd进程时，说明进程已经处于运行状态。使用bytomcli获取节点状态信息，可以看到我们已经成功地运行了bytomd进程。
 bytomd进程第一次启动后，默认不会开启挖矿功能。此时会从P2P网络种子节点中获取与之相邻的peer节点，建立握手连接并同步区块。我们将在第10章深入分析P2P网络底层工作原理。
 
-**2. 源码目录结构
+## 2. 源码目录结构
 
 比原链的源码目录如下所示：
 $ tree -L 1
@@ -79,13 +79,13 @@ $ tree -L 1
 ├── version 版本
 └── wallet 钱包管理
 
-**3.开启挖矿模式
+## 3.开启挖矿模式
 
 开启挖矿模式的命令如下：
 $ ./bytomcli set-mining true
 在默认情况下比原链的挖矿模式是关闭状态。开启挖矿模式有两种方式，第一种方式，使用bytomcli命令行交互，将mining参数设置为true，此时bytomcli会通过RPC协议与bytomd进程交互并启用挖矿模式。关闭挖矿模式则指定set-mining参数为false。第二种方式，使用dashboard页面启用挖矿参数，在这里请读者自行学习dashboard。
 
-**4.其他语言SDK简介
+## 4.其他语言SDK简介
 
 比原链技术社区提供了不同语言的SDK，如下所示：
 PHP SDK：https://github.com/lxlxw/bytom-php-sdk
