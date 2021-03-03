@@ -1,6 +1,100 @@
 Bytom
 ======
 
+比原链的安装方式有多种。本书从源码分析的角度带领读者了解架构，所以使用源码编译的方式来介绍安装过程。
+
+**1. 源码编译部署
+
+1）下载源码：
+$ git clone https://github.com/Bytom/bytom.git $GOPATH/src/github.com/bytom
+2）切换至1.0.5版本：
+$ cd $GOPATH/src/github.com/bytom
+$ git fetch origin v1.0.5
+$ git checkout v1.0.5
+3）编译源码：
+$ make bytomd
+$ make bytomcli
+4）初始化：
+$ cd ./cmd/bytomd
+$ ./bytomd init --chain_id mainnet
+目前比原链支持三种网络，使用chain_id进行区分，如下所示：
+
+mainnet：主网。
+testnet：也称wisdom，测试网。
+solonet：单机模式。
+5）启动bytomd进程：
+$ ./bytomd node
+
+$ ps -ef|grep bytomd
+501 52318 449 0 2:00PM ttys000 0:00.85 ./bytomd node
+
+$ ./bytomcli net-info
+{
+"current_block": 36714,
+"highest_block": 36714,
+"listening": true,
+"mining": false,
+"network_id": "wisdom",
+"peer_count": 10,
+"syncing": false,
+"version": "1.0.5+2bc2396a"
+}
+当我们执行ps -ef命令看到bytomd进程时，说明进程已经处于运行状态。使用bytomcli获取节点状态信息，可以看到我们已经成功地运行了bytomd进程。
+bytomd进程第一次启动后，默认不会开启挖矿功能。此时会从P2P网络种子节点中获取与之相邻的peer节点，建立握手连接并同步区块。我们将在第10章深入分析P2P网络底层工作原理。
+
+**2. 源码目录结构
+
+比原链的源码目录如下所示：
+$ tree -L 1
+.
+├── accesstoken Token管理
+├── account 账户管理
+├── api API Server接口管理
+├── asset 资产管理
+├── blockchain 交易打包、签名、查询等
+├── cmd main入口文件
+├── common 公共库
+├── config 节点配置文件
+├── consensus 共识相关模块
+├── crypto 加密库
+├── dashboard dashboard页面管理
+├── database 数据库管理
+├── docs 文档
+├── encoding 协议相关的编解码库
+├── env 环境变量管理
+├── equity 智能合约语言编译器
+├── errors 错误及异常管理
+├── math 数学计算相关库
+├── metrics metrics指标库，用于采集API Server请求相关指标
+├── mining 挖矿模块
+├── net API Server使用的HTTP基础库
+├── netsync 网络同步管理
+├── node 当前节点管理模块，环境初始化等
+├── p2p 分布式网络管理模块
+├── protocol 核心数据结构，包含块、交易、bvm虚拟机等
+├── test 单元测试
+├── testutil 单元测试工具包
+├── util 工具包
+├── vendor 第三方库
+├── version 版本
+└── wallet 钱包管理
+
+**3.开启挖矿模式
+
+开启挖矿模式的命令如下：
+$ ./bytomcli set-mining true
+在默认情况下比原链的挖矿模式是关闭状态。开启挖矿模式有两种方式，第一种方式，使用bytomcli命令行交互，将mining参数设置为true，此时bytomcli会通过RPC协议与bytomd进程交互并启用挖矿模式。关闭挖矿模式则指定set-mining参数为false。第二种方式，使用dashboard页面启用挖矿参数，在这里请读者自行学习dashboard。
+
+**4.其他语言SDK简介
+
+比原链技术社区提供了不同语言的SDK，如下所示：
+PHP SDK：https://github.com/lxlxw/bytom-php-sdk
+Java SDK：https://github.com/chainworld/java-bytom
+Java SDK：https://github.com/successli/Bytom-Java-SDK
+Python SDK：https://github.com/Bytom-Community/python-bytom
+Node SDK：https://github.com/Bytom/node-sdk
+
+
 [![Build Status](https://travis-ci.org/Bytom/bytom.svg)](https://travis-ci.org/Bytom/bytom) [![AGPL v3](https://img.shields.io/badge/license-AGPL%20v3-brightgreen.svg)](./LICENSE)
 
 **Official golang implementation of the Bytom protocol.**
